@@ -1,3 +1,4 @@
+import { fileURLToPath } from 'url'
 import { defineConfig } from 'vite'
 import electron from 'vite-plugin-electron'
 import renderer from 'vite-plugin-electron-renderer'
@@ -22,18 +23,10 @@ export default defineConfig({
             }
         ]),
         renderer(),
-        // viteElectron({
-        //     preloadDir: 'electron',
-        //     mainProcessFile: 'electron/main.ts',
-        //     builderOptions: {
-        //         appId: 'com.storyxc.app',
-        //         productName: 'iDo',
-        //         mac: {
-        //             extendInfo: {
-        //                 LSUIElement: 1,
-        //             }
-        //         }
-        //     }
-        // })
     ],   
+    resolve: {
+        alias: {
+            '@': fileURLToPath(new URL('./src', import.meta.url)),
+        }
+    },
 })
