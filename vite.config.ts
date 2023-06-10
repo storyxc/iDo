@@ -22,5 +22,18 @@ export default defineConfig({
             }
         ]),
         renderer(),
-    ],
+        // viteElectron({
+        //     preloadDir: 'electron',
+        //     mainProcessFile: 'electron/main.ts',
+        //     builderOptions: {
+        //         appId: 'com.storyxc.app',
+        //         productName: 'iDo',
+        //         mac: {
+        //             extendInfo: {
+        //                 LSUIElement: 1,
+        //             }
+        //         }
+        //     }
+        // })
+    ],   
 })

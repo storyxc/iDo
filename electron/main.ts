@@ -10,6 +10,7 @@ process.env.PUBLIC = app.isPackaged ? process.env.DIST : path.join(process.env.D
 let window: BrowserWindow | null = null;
 
 const createWindow = () => {
+    app.dock.hide();
     window = new BrowserWindow({
         width: 400,
         height: 400,
@@ -30,12 +31,13 @@ const createWindow = () => {
     }
 };
 
+
+
 app.whenReady().then(() => {
     createWindow();
     const icon = nativeImage.createFromPath(path.join(process.env.PUBLIC, 'icon.png'));
     const tray = new TrayGenerator(window!);
     tray.createTray(icon);
-
 });
 
 app.dock.hide();
