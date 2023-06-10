@@ -31,10 +31,8 @@ class TrayGenerator {
         const position = this.getWindowPosition();
         this.window?.setPosition(position.x, position.y, false);
         this.window?.show();
-        this.window?.setVisibleOnAllWorkspaces(true);
+        this.window?.setVisibleOnAllWorkspaces(true, { visibleOnFullScreen: true });
         this.window?.focus();
-        this.window?.setVisibleOnAllWorkspaces(false)
-
     }
 
     toggleWindow() {
