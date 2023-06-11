@@ -13,7 +13,7 @@ const createWindow = () => {
     app.dock.hide();
     window = new BrowserWindow({
         width: 400,
-        height: 400,
+        height: 500,
         frame: false,
         show: false,
         webPreferences: {
@@ -30,7 +30,6 @@ const createWindow = () => {
         window.loadFile(path.join(process.env.DIST, 'index.html'));
     }
 };
-
 
 
 app.whenReady().then(() => {

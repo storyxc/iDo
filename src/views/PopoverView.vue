@@ -1,9 +1,11 @@
 <template>
-  <Header/>
+  <todo-header/>
+  <todo-body/>
 </template>
 <script setup lang="ts">
 
-import Header from "../components/Header.vue";
+import TodoHeader from '@/components/TodoHeader.vue'
+import TodoBody from '@/components/TodoBody.vue'
 </script>
 <style lang="less" scoped>
 

@@ -18,9 +18,6 @@
 </script>
 <style lang="less" scoped>
 .container {
-  width: 100%;
-  margin: 10px 0;
-  padding: 0 15px;
 
   .header {
     display: flex;

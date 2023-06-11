@@ -83,6 +83,9 @@ class TrayGenerator {
         this.tray.on('right-click', () => {
             this.rightClickMenu();
         });
+        this.window?.on('blur', () => {
+            this.window?.hide();
+        });
 
     }
 }
