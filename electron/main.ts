@@ -10,9 +10,8 @@ process.env.PUBLIC = app.isPackaged ? process.env.DIST : path.join(process.env.D
 let window: BrowserWindow | null = null;
 
 const createWindow = () => {
-    app.dock.hide();
     window = new BrowserWindow({
-        width: 400,
+        width: 350,
         height: 500,
         frame: false,
         show: false,
