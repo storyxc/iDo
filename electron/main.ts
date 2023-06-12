@@ -33,7 +33,7 @@ const createWindow = () => {
 
 app.whenReady().then(() => {
     createWindow();
-    const icon = nativeImage.createFromPath(path.join(process.env.PUBLIC, 'icon.png'));
+    const icon = nativeImage.createFromPath(path.join(process.env.PUBLIC, 'iconTemplate.png'));
     const tray = new TrayGenerator(window!);
     tray.createTray(icon);
 });
