@@ -3,8 +3,8 @@
     <div class="header">
       <div class="calendar">
         <i class="iconfont icon-calendar"></i>
-        <span class="week">周六</span>
-        <span class="date">6月10日</span>
+        <span class="week">{{ week }}</span>
+        <span class="date">{{ date }}</span>
         <!--<span class="todo-count">8</span>-->
       </div>
       <div class="options">
@@ -14,6 +14,19 @@
   </div>
 </template>
 <script setup lang="ts">
+
+import { onMounted } from "vue";
+
+const week = ref('')
+const date = ref('')
+
+onMounted(() => {
+  const weekArr = ['日', '一', '二', '三', '四', '五', '六']
+  const dateObj = new Date()
+  week.value = `星期${ weekArr[dateObj.getDay()] }`
+  date.value = `${ dateObj.getMonth() + 1 }月${ dateObj.getDate() }日`
+})
+
 
 </script>
 <style lang="less" scoped>

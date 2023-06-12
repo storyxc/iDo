@@ -9,5 +9,6 @@ declare module 'vue' {
   export interface GlobalComponents {
     TodoBody: typeof import('./src/components/TodoBody.vue')['default']
     TodoHeader: typeof import('./src/components/TodoHeader.vue')['default']
+    TodoItem: typeof import('./src/components/TodoItem.vue')['default']
   }
 }
