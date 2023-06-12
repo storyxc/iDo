@@ -26,7 +26,7 @@
 <script setup lang="ts">
 import type { TodoItemEntity } from "@/common/todo/types";
 
-const props = defineProps<{
+defineProps<{
   todoItem: TodoItemEntity
 }>()
 
