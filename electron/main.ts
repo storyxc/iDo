@@ -24,9 +24,9 @@ const createWindow = () => {
     });
 
     if (process.env.VITE_DEV_SERVER_URL) {
-        window.loadURL(process.env.VITE_DEV_SERVER_URL);
+        window.loadURL(process.env.VITE_DEV_SERVER_URL).then(() => console.log('DEV'));
     } else {
-        window.loadFile(path.join(process.env.DIST, 'index.html'));
+        window.loadFile(path.join(process.env.DIST, 'index.html')).then(() => console.log('PROD'));
     }
 };
 

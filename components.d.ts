@@ -7,8 +7,14 @@ export {}
 
 declare module 'vue' {
   export interface GlobalComponents {
-    TodoBody: typeof import('./src/components/TodoBody.vue')['default']
-    TodoHeader: typeof import('./src/components/TodoHeader.vue')['default']
-    TodoItem: typeof import('./src/components/TodoItem.vue')['default']
+    AddTodo: typeof import('./src/components/AddTodo.vue')['default']
+    Circle: typeof import('./src/components/widget/Circle.vue')['default']
+    CompleteCircle: typeof import('./src/components/widget/CompleteCircle.vue')['default']
+    TodoAdd: typeof import('./src/components/todo/TodoAdd.vue')['default']
+    TodoBody: typeof import('./src/components/todo/TodoBody.vue')['default']
+    TodoFlag: typeof import('./src/components/widget/TodoFlag.vue')['default']
+    TodoHeader: typeof import('./src/components/todo/TodoHeader.vue')['default']
+    TodoItem: typeof import('./src/components/todo/TodoItem.vue')['default']
+    TodoItemEditable: typeof import('./src/components/todo/TodoItemEditable.vue')['default']
   }
 }

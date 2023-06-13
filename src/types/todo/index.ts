@@ -3,6 +3,7 @@ interface TodoItemEntity {
     remark: string;
     tags: string[];
     flag: boolean;
+    completed: boolean;
 }
 
 interface TodoList {

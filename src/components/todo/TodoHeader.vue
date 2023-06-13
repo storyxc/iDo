@@ -23,7 +23,7 @@ const date = ref('')
 onMounted(() => {
   const weekArr = ['日', '一', '二', '三', '四', '五', '六']
   const dateObj = new Date()
-  week.value = `星期${ weekArr[dateObj.getDay()] }`
+  week.value = `周${ weekArr[dateObj.getDay()] }`
   date.value = `${ dateObj.getMonth() + 1 }月${ dateObj.getDate() }日`
 })
 
