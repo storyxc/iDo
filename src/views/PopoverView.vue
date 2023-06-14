@@ -1,7 +1,6 @@
 <template>
   <todo-header/>
   <todo-body/>
-  <todo-add/>
 </template>
 <script setup lang="ts">
 

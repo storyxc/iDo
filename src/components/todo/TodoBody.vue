@@ -2,34 +2,26 @@
   <div class="container">
     <div class="todo-items">
       <div class="items-wrapper" v-for="todoItem in todoList.data">
-        <todo-item :todoItem="todoItem" :key="todoItem.title"/>
+        <todo-item
+            :todoItem="todoItem"
+            :dotted="false"
+            :key="todoItem.title"
+            @update-todo-item="handleUpdateTodoItem"
+        />
       </div>
-      <todo-item-editable @add-todo="addTodoCallback" @edit-focused="todoItemEditableFocused = true"
-                          v-click-outside="handleClickOutSide"/>
+      <todo-item
+          :todo-item="todoItemForm"
+          @add-todo-item="handleAddTodoItem"
+          v-click-outside="handleClickOutSide"
+      />
     </div>
 
   </div>
 </template>
 <script setup lang="ts">
-import { TodoList } from "@/types/todo";
+import { TodoItemEntity, TodoList } from "@/types/todo";
 import TodoItemEditable from "@/components/todo/TodoItemEditable.vue";
-import { DirectiveBinding } from "vue";
-
-const vClickOutside = {
-  beforeMount(el: HTMLElement, binding: DirectiveBinding) {
-    const handler = (e: MouseEvent) => {
-      if (!el.contains(e.target as Node)) {
-        binding.value();
-      }
-    };
-    (el as any).__vueClickOutside__ = handler;
-    document.addEventListener('click', handler);
-  },
-  unmounted(el: HTMLElement) {
-    document.removeEventListener('click', (el as any).__vueClickOutside__);
-    delete (el as any).__vueClickOutside__;
-  },
-};
+import { ClickOutside as vClickOutside } from 'element-plus'
 
 
 const todoList = reactive<TodoList>({
@@ -56,22 +48,39 @@ onMounted(() => {
 });
 
 /**
- * 添加待办事项后的回调
+ * 新增todoItem
  */
-const addTodoCallback = () => {
+const todoItemForm: TodoItemEntity = reactive<TodoItemEntity>({
+  title: '',
+  remark: '',
+  tags: [],
+  flag: false,
+  completed: false
+});
+
+const handleAddTodoItem = (item: TodoItemEntity) => {
   console.log('addTodoCallback');
+  console.log(item);
+  todoList.data.push(item);
+  nextTick(() => {
+    todoItemForm.title = '';
+  })
+}
+
+/**
+ * 更新待办事项后的回调
+ */
+const handleUpdateTodoItem = (item: TodoItemEntity) => {
+  console.log('updateTodoCallback');
+  console.log(item);
 }
 
 /**
  * 点击todo-item-editable外部的回调
  */
-const todoItemEditableFocused = ref(false);
 
 const handleClickOutSide = () => {
-  if (todoItemEditableFocused.value) {
-    console.log('handleClickOutSide');
-    todoItemEditableFocused.value = false;
-  }
+  console.log('handleClickOutSide');
 }
 
 </script>
