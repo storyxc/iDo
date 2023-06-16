@@ -7,14 +7,11 @@ export {}
 
 declare module 'vue' {
   export interface GlobalComponents {
-    CompleteCircle: typeof import('./src/components/widget/CompleteCircle.vue')['default']
-    ElInput: typeof import('element-plus/es')['ElInput']
-    ElPopover: typeof import('element-plus/es')['ElPopover']
     ElTag: typeof import('element-plus/es')['ElTag']
     TodoBody: typeof import('./src/components/todo/TodoBody.vue')['default']
+    TodoCompleteCircle: typeof import('./src/components/widget/TodoCompleteCircle.vue')['default']
     TodoFlag: typeof import('./src/components/widget/TodoFlag.vue')['default']
     TodoHeader: typeof import('./src/components/todo/TodoHeader.vue')['default']
     TodoItem: typeof import('./src/components/todo/TodoItem.vue')['default']
-    TodoItemEditable: typeof import('./src/components/todo/TodoItemEditable.vue')['default']
   }
 }

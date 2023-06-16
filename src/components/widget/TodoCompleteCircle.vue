@@ -21,7 +21,7 @@ const handleFinished = () => {
   border-radius: 50%;
   border: 1px solid #838383;
   margin-right: 14px;
-  transform: translateY(3px);
+  transform: translateY(1px);
 }
 
 .circle-dotted {
@@ -30,7 +30,7 @@ const handleFinished = () => {
   border-radius: 50%;
   border: 1px dotted #838383;
   margin-right: 14px;
-  transform: translateY(3px);
+  transform: translateY(1px);
 }
 
 </style>

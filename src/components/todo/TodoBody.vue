@@ -5,13 +5,13 @@
         <todo-item
             :todoItem="todoItem"
             :dotted="false"
-            :key="todoItem.title"
+            :key="todoItem.id"
             @update-todo-item="handleUpdateTodoItem"
+            @remove-todo-item="handleRemoveTodoItem"
         />
       </div>
       <todo-item
           :todo-item="todoItemForm"
-          @add-todo-item="handleAddTodoItem"
           v-click-outside="handleClickOutSide"
       />
     </div>
@@ -20,9 +20,9 @@
 </template>
 <script setup lang="ts">
 import { TodoItemEntity, TodoList } from "@/types/todo";
-import TodoItemEditable from "@/components/todo/TodoItemEditable.vue";
+//@ts-ignore
 import { ClickOutside as vClickOutside } from 'element-plus'
-
+import { clone } from "lodash";
 
 const todoList = reactive<TodoList>({
   data: []
@@ -31,6 +31,7 @@ const todoList = reactive<TodoList>({
 onMounted(() => {
   todoList.data = [
     {
+      "id": 1,
       "title": "todo1",
       "remark": "todo1",
       "tags": ["tag1", "tag2"],
@@ -38,6 +39,7 @@ onMounted(() => {
       "completed": false
     },
     {
+      "id": 2,
       "title": "todo2",
       "remark": "todo2",
       "tags": ["tag1", "tag2"],
@@ -51,6 +53,7 @@ onMounted(() => {
  * 新增todoItem
  */
 const todoItemForm: TodoItemEntity = reactive<TodoItemEntity>({
+  id: 0,
   title: '',
   remark: '',
   tags: [],
@@ -58,29 +61,47 @@ const todoItemForm: TodoItemEntity = reactive<TodoItemEntity>({
   completed: false
 });
 
-const handleAddTodoItem = (item: TodoItemEntity) => {
-  console.log('addTodoCallback');
-  console.log(item);
-  todoList.data.push(item);
-  nextTick(() => {
-    todoItemForm.title = '';
-  })
+const handleRemoveTodoItem = (id: number) => {
+  todoList.data.splice(todoList.data.findIndex(item => item.id === id), 1);
 }
 
 /**
  * 更新待办事项后的回调
  */
 const handleUpdateTodoItem = (item: TodoItemEntity) => {
-  console.log('updateTodoCallback');
-  console.log(item);
+  const index = todoList.data.findIndex(todoItem => todoItem.id === item.id);
+  if (index !== -1) {
+    todoList.data.splice(index, 1, item);
+  }
+  console.log(todoList.data);
 }
 
 /**
- * 点击todo-item-editable外部的回调
+ * 点击新增项元素外部时的回调
  */
-
 const handleClickOutSide = () => {
-  console.log('handleClickOutSide');
+  if (!todoItemForm.title) {
+    return;
+  }
+  // 获取最大id
+  const maxId = todoList.data.reduce((prev, current) => {
+    return prev.id > current.id ? prev : current;
+  }).id;
+  todoItemForm.id = maxId + 1;
+  todoList.data.push(clone(todoItemForm));
+  resetForm();
+}
+
+/**
+ * 重置表单
+ */
+const resetForm = () => {
+  todoItemForm.id = 0;
+  todoItemForm.title = '';
+  todoItemForm.remark = '';
+  todoItemForm.tags = [];
+  todoItemForm.flag = false;
+  todoItemForm.completed = false;
 }
 
 </script>

@@ -1,6 +1,6 @@
 <template>
   <div class="item">
-    <complete-circle :dotted="!todoItem.title"/>
+    <todo-complete-circle :dotted="!todoItem.title"/>
     <div class="todo-info">
       <input
           :class="[(todoItem.title || focused && !todoItem.title) ? ['todo-title', 'todo-input'] : 'todo-hide' ]"
@@ -8,7 +8,7 @@
           @blur="titleInputOnBlur"
           @focus="titleInputOnFocus"
       />
-      <div :class="[ {'display-none' : !focused && !todoItem?.title } ]">
+      <div :class="[ {'display-none' : !focused && !todoItem.title } ]">
         <input
             class="todo-desc todo-input"
             v-model="todoItem.remark"
@@ -52,7 +52,7 @@ const props = defineProps<{
   todoItem: TodoItemEntity
 }>()
 
-const emit = defineEmits(['update-todo-item'])
+const emit = defineEmits(['update-todo-item', 'remove-todo-item'])
 
 const focused = ref(false)
 
@@ -67,11 +67,14 @@ const titleInputOnFocus = () => {
 // 失去焦点时，如果标题为空，则填充默认标题
 const titleInputOnBlur = () => {
   if (!props.todoItem.title) {
-    props.todoItem.title = '新待办事项'
-    emit('add-todo-item', props.todoItem)
+    if (props.todoItem.id) {
+      emit('remove-todo-item', props.todoItem.id)
+    }
   } else {
+    console.log('update-todo-item')
     emit('update-todo-item', props.todoItem)
   }
+  focused.value = false
 }
 
 
@@ -130,6 +133,7 @@ const handleUpdateFlag = (newFlag: boolean) => {
 
   .todo-info {
     flex: 1;
+    height: 70px;
 
     input {
       display: block;
@@ -151,7 +155,7 @@ const handleUpdateFlag = (newFlag: boolean) => {
         border: none;
         font-size: 14px;
         font-weight: 500;
-        height: 69px;
+        //height: 69px;
         margin-bottom: 2px;
       }
     }
@@ -202,6 +206,7 @@ const handleUpdateFlag = (newFlag: boolean) => {
           position: absolute;
           bottom: -40px;
           left: -21px;
+          z-index: 1;
           background-color: #f5f5f5;
 
           input {
