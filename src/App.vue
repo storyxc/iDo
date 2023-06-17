@@ -1,8 +1,7 @@
 <template>
-  <popover-view/>
+  <todo-popover-view/>
 </template>
 <script setup lang="ts">
-import PopoverView from "./views/PopoverView.vue";
+import TodoPopoverView from "./views/TodoPopoverView.vue";
 </script>
-<style scoped>
-</style>
+<style scoped></style>

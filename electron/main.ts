@@ -1,11 +1,12 @@
-import { app, nativeImage, BrowserWindow } from 'electron';
-import path from 'path';
-import TrayGenerator from './tray';
+import { app, BrowserWindow, nativeImage } from "electron";
+import path from "path";
+import TrayGenerator from "./tray";
+import ipcMainHandler from "./ipcMainHandler";
 
-
-process.env.DIST = path.join(__dirname, '../dist')
-process.env.PUBLIC = app.isPackaged ? process.env.DIST : path.join(process.env.DIST, '../public')
-
+process.env.DIST = path.join(__dirname, "../dist");
+process.env.PUBLIC = app.isPackaged
+    ? process.env.DIST
+    : path.join(process.env.DIST, "../public");
 
 let window: BrowserWindow | null = null;
 
@@ -18,22 +19,29 @@ const createWindow = () => {
         webPreferences: {
             nodeIntegration: false,
             contextIsolation: true,
-            sandbox: true,
-            webviewTag: true,
+            webSecurity: true,
+            preload: path.join(__dirname, "preload.js"),
         },
     });
 
     if (process.env.VITE_DEV_SERVER_URL) {
-        window.loadURL(process.env.VITE_DEV_SERVER_URL).then(() => console.log('DEV'));
+        // window.webContents.openDevTools();
+        window
+            .loadURL(process.env.VITE_DEV_SERVER_URL)
+            .then(() => console.log("DEV"));
     } else {
-        window.loadFile(path.join(process.env.DIST, 'index.html')).then(() => console.log('PROD'));
+        window
+            .loadFile(path.join(process.env.DIST, "index.html"))
+            .then(() => console.log("PROD"));
     }
 };
 
-
 app.whenReady().then(() => {
+    ipcMainHandler.startListen();
     createWindow();
-    const icon = nativeImage.createFromPath(path.join(process.env.PUBLIC, 'iconTemplate.png'));
+    const icon = nativeImage.createFromPath(
+        path.join(process.env.PUBLIC, "iconTemplate.png")
+    );
     const tray = new TrayGenerator(window!);
     tray.createTray(icon);
 });

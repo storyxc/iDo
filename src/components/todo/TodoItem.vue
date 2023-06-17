@@ -1,23 +1,20 @@
 <template>
-  <div class="item">
-    <todo-complete-circle :dotted="!todoItem.title"/>
+  <div class="item" :class="{ 'slide-out': isCompleted }">
+    <todo-complete-circle :id="cloneTodoItem.id" @todo-complete="handleComplete"/>
     <div class="todo-info">
       <input
-          :class="[(todoItem.title || focused && !todoItem.title) ? ['todo-title', 'todo-input'] : 'todo-hide' ]"
-          v-model="todoItem.title"
+          :class="[cloneTodoItem.title || (focused && !cloneTodoItem.title) ? ['todo-title', 'todo-input'] : 'todo-hide']"
+          v-model="cloneTodoItem.title"
           @blur="titleInputOnBlur"
           @focus="titleInputOnFocus"
       />
-      <div :class="[ {'display-none' : !focused && !todoItem.title } ]">
-        <input
-            class="todo-desc todo-input"
-            v-model="todoItem.remark"
-        />
+      <div :class="[{ 'display-none': !focused && !cloneTodoItem.title }]">
+        <input class="todo-desc todo-input" v-model="cloneTodoItem.remark" @blur="descInputOnBlur"/>
         <!--标签-->
         <div class="todo-tags">
           <div class="tags-list">
             <el-tag
-                v-for="(tag, index) in todoItem.tags"
+                v-for="(tag, index) in cloneTodoItem.tags"
                 :key="tag"
                 class="todo-tag"
                 effect="light"
@@ -33,12 +30,17 @@
           <div class="tags-add" @click="showAddTagDialog">
             <span>#</span>
             <div class="add-tag-dialog" v-if="showDialog">
-              <input ref="tagInput" type="text" placeholder="标签名" @blur="showDialog = false"
-                     @keydown="handleTagInputKeydown"/>
+              <input
+                  ref="tagInput"
+                  type="text"
+                  placeholder="标签名"
+                  @blur="showDialog = false"
+                  @keydown="handleTagInputKeydown"
+              />
             </div>
           </div>
           <!--flag标记-->
-          <todo-flag :flag="todoItem.flag" @update-flag="handleUpdateFlag"/>
+          <todo-flag :flag="cloneTodoItem.flag" @update-flag="handleUpdateFlag"/>
         </div>
         <div class="line"></div>
       </div>
@@ -46,86 +48,150 @@
   </div>
 </template>
 <script setup lang="ts">
-import type { TodoItemEntity } from "@/types/todo";
+import type { TodoItemEntity } from "src/universal/todo";
+import { clone } from "lodash";
+import { ComputedRef } from "vue";
 
 const props = defineProps<{
-  todoItem: TodoItemEntity
-}>()
+  todoItem: TodoItemEntity;
+}>();
 
-const emit = defineEmits(['update-todo-item', 'remove-todo-item'])
+const emit = defineEmits([
+  "update-todo-item",
+  "remove-todo-item",
+  "update-flag",
+  "update-completed",
+  "update-add-todo-form"
+]);
 
-const focused = ref(false)
+const focused = ref(false);
+const isCompleted = ref(false);
+
+
+const cloneTodoItem: ComputedRef<TodoItemEntity> = computed(() => {
+  return clone(props.todoItem)
+})
+
+/**
+ * 完成标记部分
+ */
+const handleComplete = async (id: number) => {
+  if (id <= 0) {
+    return;
+  }
+  cloneTodoItem.value.completed = true;
+  isCompleted.value = true;
+  setTimeout(() => {
+    emit("update-completed", cloneTodoItem.value);
+  }, 400);
+};
 
 /**
  * 标题部分
  */
-
 // 获取焦点时,将focus状态设置为true
 const titleInputOnFocus = () => {
-  focused.value = true
-}
-// 失去焦点时，如果标题为空，则填充默认标题
+  focused.value = true;
+};
 const titleInputOnBlur = () => {
-  if (!props.todoItem.title) {
-    if (props.todoItem.id) {
-      emit('remove-todo-item', props.todoItem.id)
+  if (!cloneTodoItem.value.title) {
+    // 失去焦点时，如果标题为空，且id不为空，则删除该todoItem
+    if (cloneTodoItem.value.id) {
+      emit("remove-todo-item", cloneTodoItem.value.id);
     }
+    focused.value = false;
   } else {
-    console.log('update-todo-item')
-    emit('update-todo-item', props.todoItem)
+    if (!cloneTodoItem.value.id) {
+      // 失去焦点时，如果标题不为空，且没有id，则通知父组件更新待提交表单
+      emit("update-add-todo-form", cloneTodoItem.value);
+    } else {
+      // 失去焦点时，如果标题不为空，且有id & 如果cloneTodoItem和props.todoItem不相等，则通知父组件更新todoItem
+      if (JSON.stringify(cloneTodoItem.value) !== JSON.stringify(props.todoItem)) {
+        emit("update-todo-item", cloneTodoItem.value);
+      }
+    }
+    focused.value = false;
   }
-  focused.value = false
-}
+};
 
+const descInputOnBlur = () => {
+  // 失去焦点时，如果描述不为空，且有id，则通知父组件更新todoItem
+  if (cloneTodoItem.value.id) {
+    emit("update-todo-item", cloneTodoItem.value);
+  } else {
+    // 失去焦点时，如果描述不为空，且没有id，则通知父组件更新待提交表单
+    if (JSON.stringify(cloneTodoItem.value) !== JSON.stringify(props.todoItem)) {
+      emit("update-add-todo-form", cloneTodoItem.value);
+    }
+  }
+}
 
 /**
  * 删除标签部分
  */
 const handleTagCloseClick = (index: number) => {
-  props.todoItem.tags.splice(index, 1)
-  emit('update-todo-item', props.todoItem)
-}
+  cloneTodoItem.value.tags.splice(index, 1);
+  if (cloneTodoItem.value.id) {
+    emit("update-todo-item", cloneTodoItem.value);
+  } else {
+    emit("update-add-todo-form", cloneTodoItem.value);
+  }
+};
 
 /**
  * 新增标签部分
  */
-const tagInput = ref<HTMLInputElement | null>(null)
-const showDialog = ref(false)
+const tagInput = ref<HTMLInputElement | null>(null);
+const showDialog = ref(false);
 
 // 展示新增标签对话框
 const showAddTagDialog = () => {
-  showDialog.value = true
+  showDialog.value = true;
   nextTick(() => {
-    tagInput.value?.focus()
-  })
-}
+    tagInput.value?.focus();
+  });
+};
 // 处理新增标签对话框的键盘事件
 const handleTagInputKeydown = (e: KeyboardEvent) => {
-  if (e.key === 'Enter') {
-    const tag = tagInput.value?.value
-    let tags = props.todoItem.tags
+  if (e.key === "Enter") {
+    const tag = tagInput.value?.value;
+    let tags = cloneTodoItem.value.tags;
     if (tag && !tags.includes(tag) && tags.length <= 2) {
-      props.todoItem.tags.push(tag)
-      emit('update-todo-item', props.todoItem)
+      cloneTodoItem.value.tags.push(tag);
+      if (cloneTodoItem.value.id) {
+        emit("update-todo-item", cloneTodoItem.value);
+      } else {
+        emit("update-add-todo-form", cloneTodoItem.value)
+      }
     }
-    showDialog.value = false
-  } else if (e.key === 'Escape') {
-    showDialog.value = false
+    showDialog.value = false;
+  } else if (e.key === "Escape") {
+    showDialog.value = false;
   }
-}
+};
 /**
- * 标记部分
+ * 标记important flag部分
  * @param newFlag
  */
 const handleUpdateFlag = (newFlag: boolean) => {
-  props.todoItem.flag = newFlag
-  emit('update-todo-item', props.todoItem)
-}
-
+  cloneTodoItem.value.flag = newFlag;
+  console.log(cloneTodoItem.value)
+  if (cloneTodoItem.value.id) {
+    emit("update-todo-item", cloneTodoItem.value);
+  } else {
+    emit("update-add-todo-form", cloneTodoItem.value);
+  }
+};
 </script>
 <style scoped lang="less">
 .item {
   display: flex;
+  transition: all 0.7s ease-out;
+
+  &.slide-out {
+    opacity: 0;
+    transform: translateX(100%);
+  }
 
   .display-none {
     display: none;
@@ -219,7 +285,7 @@ const handleUpdateFlag = (newFlag: boolean) => {
           }
 
           &:before {
-            content: '';
+            content: "";
             display: block;
             width: 0;
             height: 0;
@@ -232,7 +298,6 @@ const handleUpdateFlag = (newFlag: boolean) => {
           }
         }
       }
-
 
       .flag {
         margin-left: 10px;
@@ -255,7 +320,7 @@ const handleUpdateFlag = (newFlag: boolean) => {
 
     .line {
       &:after {
-        content: '';
+        content: "";
         display: block;
         width: 90%;
         height: 1px;
