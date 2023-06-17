@@ -1,12 +1,4 @@
-import { TodoItemEntity } from "@/universal/todo";
-
-export interface ElectronAPI {
-    fetchTodoItem: () => Promise<TodoItemEntity[]>;
-    completeTodoItem: (id: number) => Promise<boolean>;
-    removeTodoItem: (id: number) => Promise<boolean>;
-    updateTodoItem: (todoItemEntityStr: stirng) => Promise<boolean>;
-    addTodoItem: (todoItemEntityStr: stirng) => Promise<boolean>;
-}
+import { ElectronAPI } from "@/universal/electron";
 
 declare global {
     interface Window {
