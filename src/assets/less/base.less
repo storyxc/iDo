@@ -1,13 +1,9 @@
 :root {
-  font-family: "PingFang SC", "Helvetica", "Microsoft YaHei", "Arial",
+  font-family: "PingFang SC", "Menlo", "Helvetica", "Microsoft YaHei", "Arial",
   sans-serif;
   line-height: 1.5;
   font-weight: 400;
-
   color-scheme: light dark;
-  color: rgba(255, 255, 255, 0.87);
-  background-color: #242424;
-
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
@@ -90,17 +86,29 @@ button:focus-visible {
   border: none;
 }
 
+
 @media (prefers-color-scheme: light) {
   :root {
     color: #213547;
     background-color: #ffffff;
+    --tag-bg-color: #f4f4f5;
+    --tag-border-color: #ebebeb;
+    --line-color: #ececec;
+  }
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    color: #213547;
+    background-color: #242424;
+
+    --tag-bg-color: #202121;
+    --tag-border-color: #2d2d2f;
+    --line-color: #2d2d2f;
   }
 
-  a:hover {
-    color: #747bff;
-  }
-
-  button {
-    background-color: #f9f9f9;
+  input {
+    color: #ffffff;
+    background-color: #242424;
   }
 }

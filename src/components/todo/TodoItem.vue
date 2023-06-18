@@ -17,7 +17,6 @@
                 v-for="(tag, index) in cloneTodoItem.tags"
                 :key="tag"
                 class="todo-tag"
-                effect="light"
                 type="info"
                 size="small"
                 @close="handleTagCloseClick(index)"
@@ -252,16 +251,20 @@ const handleUpdateFlag = (newFlag: boolean) => {
           align-items: center;
           margin-right: 10px;
           padding: 2px 5px;
-          background-color: #f5f5f5;
+          border-color: var(--tag-border-color);
+          background-color: var(--tag-bg-color);
         }
       }
 
       .tags-add {
         position: relative;
+        width: 25px;
+        height: 25px;
         color: #858585;
-        background-color: #f5f5f5;
+        background-color: var(--tag-bg-color);
+        border: 1px solid var(--tag-border-color);
         padding: 2px 8px;
-        border-radius: 2px;
+        border-radius: 5px;
 
         span {
           cursor: default;
@@ -279,7 +282,7 @@ const handleUpdateFlag = (newFlag: boolean) => {
             width: 100%;
             height: 30px;
             padding: 0 10px;
-            background-color: #f5f5f5;
+            background-color: var(--tag-bg-color);
             border: 1px solid transparent;
             border-radius: 2px;
           }
@@ -290,30 +293,12 @@ const handleUpdateFlag = (newFlag: boolean) => {
             width: 0;
             height: 0;
             border: 8px solid transparent;
-            border-bottom-color: #f5f5f5;
+            border-bottom-color: var(--tag-bg-color);
             position: absolute;
             top: -16px;
             left: 50%;
             transform: translateX(-50%);
           }
-        }
-      }
-
-      .flag {
-        margin-left: 10px;
-
-        .todo-flag-n {
-          color: #858585;
-          background-color: #f5f5f5;
-          padding: 2px 5px;
-          border-radius: 2px;
-        }
-
-        .todo-flag-y {
-          color: #ff0000;
-          background-color: #f5f5f5;
-          padding: 2px 5px;
-          border-radius: 2px;
         }
       }
     }
@@ -324,7 +309,7 @@ const handleUpdateFlag = (newFlag: boolean) => {
         display: block;
         width: 90%;
         height: 1px;
-        background-color: #ececec;
+        background-color: var(--line-color);
         margin: 5px 0;
       }
     }

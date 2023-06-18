@@ -16,20 +16,23 @@ const props = defineProps({
 <style scoped lang="less">
 
 .flag {
+  width: 25px;
+  height: 25px;
   margin-left: 10px;
+  border: 1px solid var(--tag-border-color);
+  border-radius: 5px;
+  background-color: var(--tag-bg-color);
 
-  .todo-flag-n {
-    color: #858585;
-    background-color: #f5f5f5;
-    padding: 2px 5px;
-    border-radius: 2px;
-  }
+  .todo-flag {
+    &-n {
+      padding: 2px 3px;
+      color: #858585;
+    }
 
-  .todo-flag-y {
-    color: #ff0000;
-    background-color: #f5f5f5;
-    padding: 2px 5px;
-    border-radius: 2px;
+    &-y {
+      padding: 2px 3px;
+      color: #ff0000;
+    }
   }
 }
 </style>
