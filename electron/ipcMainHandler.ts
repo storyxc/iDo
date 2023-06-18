@@ -1,4 +1,4 @@
-import { TodoItemEntity } from "@/universal/todo";
+import { Preferences, TodoItemEntity } from "@/universal/todo";
 import { ipcMain, app } from "electron";
 import fs from "fs";
 import path from "path";
@@ -8,6 +8,7 @@ export default {
     startListen: () => {
         const pathElement = app.getPath("userData")
         const todoFilePath = path.join(pathElement, "todo.json");
+        const preferencesFilePath = path.join(pathElement, "preferences.json");
         /**
          * @description 拉取待办事项列表数据
          */
@@ -99,7 +100,53 @@ export default {
             }
             return false;
         });
-    }
+
+        /**
+         * @description 获取偏好设置
+         */
+        ipcMain.handle("GET-PREFERENCES", async (): Promise<Preferences> => {
+            if (fs.existsSync(preferencesFilePath)) {
+                const preferences = fs.readFileSync(preferencesFilePath, "utf-8");
+                return JSON.parse(preferences);
+            } else {
+                const defaultPreferences = {
+                    startAtLogin: false,
+                    updateFrequency: 'Never',
+                };
+                fs.writeFileSync(preferencesFilePath, JSON.stringify(defaultPreferences));
+                return defaultPreferences;
+            }
+        });
+
+        /**
+         * @description 切换开机自启动
+         */
+        ipcMain.handle("TOGGLE-AUTO-LAUNCH", async (event, enabled: boolean): Promise<boolean> => {
+            app.setLoginItemSettings({
+                openAtLogin: enabled,
+                openAsHidden: true,
+            });
+
+            const preferences = fs.readFileSync(preferencesFilePath, "utf-8");
+            const preferencesObj = JSON.parse(preferences);
+            preferencesObj.startAtLogin = enabled;
+            fs.writeFileSync(preferencesFilePath, JSON.stringify(preferencesObj));
+            return true;
+        });
+
+        /**
+         * @description 切换更新频率
+         */
+        ipcMain.handle("CHANGE-UPDATE-FREQUENCY", async (event, updateFrequency: string): Promise<boolean> => {
+            const preferences = fs.readFileSync(preferencesFilePath, "utf-8");
+            const preferencesObj = JSON.parse(preferences);
+            preferencesObj.updateFrequency = updateFrequency;
+            fs.writeFileSync(preferencesFilePath, JSON.stringify(preferencesObj));
+            return true;
+        });
+
+    },
+
 }
 
 /**

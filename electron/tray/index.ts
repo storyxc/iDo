@@ -1,4 +1,4 @@
-import { Tray, BrowserWindow, Menu, MenuItem } from 'electron';
+import { Tray, BrowserWindow, Menu, MenuItem, globalShortcut } from 'electron';
 
 class TrayGenerator {
 
@@ -86,7 +86,20 @@ class TrayGenerator {
         this.window?.on('blur', () => {
             this.window?.hide();
         });
+    }
 
+    /**
+     * We need to register a global shortcut to toggle the window.
+     */
+    initShortcut(): void {
+        const ret = globalShortcut.register('Control+Command+T', () => {
+            this.toggleWindow();
+        });
+        if (!ret) {
+            console.log('registration failed')
+        }
+        // 检查快捷键是否注册成功
+        // console.log(globalShortcut.isRegistered('Control+Command+T'))
     }
 }
 

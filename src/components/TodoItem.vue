@@ -47,7 +47,7 @@
   </div>
 </template>
 <script setup lang="ts">
-import type { TodoItemEntity } from "src/universal/todo";
+import type { TodoItemEntity } from "@/universal/todo";
 import { clone } from "lodash";
 import { ComputedRef } from "vue";
 

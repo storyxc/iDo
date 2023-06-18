@@ -22,7 +22,7 @@
   </div>
 </template>
 <script setup lang="ts">
-import { TodoItemEntity, TodoList } from "src/universal/todo";
+import { TodoItemEntity, TodoList } from "@/universal/todo";
 //@ts-ignore
 import { ClickOutside as vClickOutside } from 'element-plus'
 

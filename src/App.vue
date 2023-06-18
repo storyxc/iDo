@@ -1,7 +1,8 @@
 <template>
-  <todo-popover-view/>
+  <TodoHeaderView/>
+  <RouterView/>
 </template>
 <script setup lang="ts">
-import TodoPopoverView from "./views/TodoPopoverView.vue";
+import TodoHeaderView from "@/views/TodoHeaderView.vue";
 </script>
 <style scoped></style>

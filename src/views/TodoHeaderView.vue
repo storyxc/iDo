@@ -8,7 +8,12 @@
         <!--<span class="todo-count">8</span>-->
       </div>
       <div class="options">
-        <i class="iconfont icon-conditions"></i>
+        <router-link to="/">
+          <i class="iconfont icon-order"></i>
+        </router-link>
+        <router-link to="/preferences">
+          <i class="iconfont icon-conditions"></i>
+        </router-link>
       </div>
     </div>
   </div>
@@ -47,10 +52,6 @@ onMounted(() => {
       display: inline-flex;
       align-items: center;
 
-      i {
-        cursor: pointer;
-      }
-
       span {
         margin-left: 5px;
         cursor: default;
@@ -70,7 +71,12 @@ onMounted(() => {
 
     .options {
       i {
+        color: #808080;
         cursor: pointer;
+
+        &.icon-order {
+          margin-right: 5px;
+        }
       }
     }
   }

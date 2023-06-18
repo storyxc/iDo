@@ -1,4 +1,4 @@
-import { app, BrowserWindow, nativeImage } from "electron";
+import { app, BrowserWindow, globalShortcut, nativeImage } from "electron";
 import path from "path";
 import TrayGenerator from "./tray";
 import ipcMainHandler from "./ipcMainHandler";
@@ -44,6 +44,11 @@ app.whenReady().then(() => {
     );
     const tray = new TrayGenerator(window!);
     tray.createTray(icon);
+    tray.initShortcut();
+});
+
+app.on('will-quit', () => {
+    globalShortcut.unregisterAll();
 });
 
 app.dock.hide();
