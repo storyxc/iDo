@@ -1,10 +1,10 @@
-import { createRouter, createWebHistory } from 'vue-router'
-import TodoBodyView from "@/views/TodoBodyView.vue";
+import { createRouter, createWebHashHistory } from 'vue-router'
 import PreferenceView from "@/views/PreferenceView.vue";
+import TodoBodyView from "@/views/TodoBodyView.vue";
 
 
 const router = createRouter({
-    history: createWebHistory(import.meta.env.BASE_URL),
+    history: createWebHashHistory(import.meta.env.BASE_URL),
     routes: [
         {
             path: '/',
@@ -15,10 +15,6 @@ const router = createRouter({
             path: '/preferences',
             name: 'preferences',
             component: PreferenceView
-        },
-        {
-            path: '/index.html',
-            redirect: '/'
         }
     ]
 })

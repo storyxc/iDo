@@ -5,7 +5,6 @@
         <i class="iconfont icon-calendar"></i>
         <span class="week">{{ week }}</span>
         <span class="date">{{ date }}</span>
-        <!--<span class="todo-count">8</span>-->
       </div>
       <div class="options">
         <router-link to="/">
