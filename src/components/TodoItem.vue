@@ -1,20 +1,25 @@
 <template>
   <div class="item" :class="{ 'slide-out': isCompleted }">
-    <todo-complete-circle :id="cloneTodoItem.id" @todo-complete="handleComplete"/>
+    <todo-complete-circle :id="todoItem.id" @todo-complete="handleComplete"/>
     <div class="todo-info">
       <input
-          :class="[cloneTodoItem.title || (focused && !cloneTodoItem.title) ? ['todo-title', 'todo-input'] : 'todo-hide']"
-          v-model="cloneTodoItem.title"
+          :class="[todoItem.title || (focused && !todoItem.title) ? ['todo-title', 'todo-input'] : 'todo-hide']"
+          :value="todoItem.title"
           @blur="titleInputOnBlur"
           @focus="titleInputOnFocus"
+          @input="todoItem.title = $event.target.value"
       />
-      <div :class="[{ 'display-none': !focused && !cloneTodoItem.title }]">
-        <input class="todo-desc todo-input" v-model="cloneTodoItem.remark" @blur="descInputOnBlur"/>
+      <div :class="[{ 'display-none': !focused && !todoItem.title }]">
+        <input class="todo-desc todo-input"
+               :value="todoItem.remark"
+               @blur="descInputOnBlur"
+               @input="todoItem.remark = $event.target.value"
+        />
         <!--标签-->
         <div class="todo-tags">
           <div class="tags-list">
             <el-tag
-                v-for="(tag, index) in cloneTodoItem.tags"
+                v-for="(tag, index) in todoItem.tags"
                 :key="tag"
                 class="todo-tag"
                 type="info"
@@ -39,7 +44,7 @@
             </div>
           </div>
           <!--flag标记-->
-          <todo-flag :flag="cloneTodoItem.flag" @update-flag="handleUpdateFlag"/>
+          <todo-flag :flag="todoItem.flag" @update-flag="handleUpdateFlag"/>
         </div>
         <div class="line"></div>
       </div>
@@ -48,8 +53,6 @@
 </template>
 <script setup lang="ts">
 import type { TodoItemEntity } from "@/universal/todo";
-import { clone } from "lodash";
-import { ComputedRef } from "vue";
 
 const props = defineProps<{
   todoItem: TodoItemEntity;
@@ -67,10 +70,6 @@ const focused = ref(false);
 const isCompleted = ref(false);
 
 
-const cloneTodoItem: ComputedRef<TodoItemEntity> = computed(() => {
-  return clone(props.todoItem)
-})
-
 /**
  * 完成标记部分
  */
@@ -78,10 +77,10 @@ const handleComplete = async (id: number) => {
   if (id <= 0) {
     return;
   }
-  cloneTodoItem.value.completed = true;
+  props.todoItem.completed = true;
   isCompleted.value = true;
   setTimeout(() => {
-    emit("update-completed", cloneTodoItem.value);
+    emit("update-completed", props.todoItem);
   }, 400);
 };
 
@@ -93,21 +92,19 @@ const titleInputOnFocus = () => {
   focused.value = true;
 };
 const titleInputOnBlur = () => {
-  if (!cloneTodoItem.value.title) {
+  if (!props.todoItem.title) {
     // 失去焦点时，如果标题为空，且id不为空，则删除该todoItem
-    if (cloneTodoItem.value.id) {
-      emit("remove-todo-item", cloneTodoItem.value.id);
+    if (props.todoItem.id) {
+      emit("remove-todo-item", props.todoItem.id);
     }
     focused.value = false;
   } else {
-    if (!cloneTodoItem.value.id) {
+    if (!props.todoItem.id) {
       // 失去焦点时，如果标题不为空，且没有id，则通知父组件更新待提交表单
-      emit("update-add-todo-form", cloneTodoItem.value);
+      emit("update-add-todo-form", props.todoItem);
     } else {
-      // 失去焦点时，如果标题不为空，且有id & 如果cloneTodoItem和props.todoItem不相等，则通知父组件更新todoItem
-      if (JSON.stringify(cloneTodoItem.value) !== JSON.stringify(props.todoItem)) {
-        emit("update-todo-item", cloneTodoItem.value);
-      }
+      // 失去焦点时，如果标题不为空，且有id 则通知父组件更新todoItem
+      emit("update-todo-item", props.todoItem);
     }
     focused.value = false;
   }
@@ -115,13 +112,11 @@ const titleInputOnBlur = () => {
 
 const descInputOnBlur = () => {
   // 失去焦点时，如果描述不为空，且有id，则通知父组件更新todoItem
-  if (cloneTodoItem.value.id) {
-    emit("update-todo-item", cloneTodoItem.value);
+  if (props.todoItem.id) {
+    emit("update-todo-item", props.todoItem);
   } else {
     // 失去焦点时，如果描述不为空，且没有id，则通知父组件更新待提交表单
-    if (JSON.stringify(cloneTodoItem.value) !== JSON.stringify(props.todoItem)) {
-      emit("update-add-todo-form", cloneTodoItem.value);
-    }
+    emit("update-add-todo-form", props.todoItem);
   }
 }
 
@@ -129,11 +124,11 @@ const descInputOnBlur = () => {
  * 删除标签部分
  */
 const handleTagCloseClick = (index: number) => {
-  cloneTodoItem.value.tags.splice(index, 1);
-  if (cloneTodoItem.value.id) {
-    emit("update-todo-item", cloneTodoItem.value);
+  props.todoItem.tags.splice(index, 1);
+  if (props.todoItem.id) {
+    emit("update-todo-item", props.todoItem);
   } else {
-    emit("update-add-todo-form", cloneTodoItem.value);
+    emit("update-add-todo-form", props.todoItem);
   }
 };
 
@@ -154,13 +149,13 @@ const showAddTagDialog = () => {
 const handleTagInputKeydown = (e: KeyboardEvent) => {
   if (e.key === "Enter") {
     const tag = tagInput.value?.value;
-    let tags = cloneTodoItem.value.tags;
+    let tags = props.todoItem.tags;
     if (tag && !tags.includes(tag) && tags.length <= 2) {
-      cloneTodoItem.value.tags.push(tag);
-      if (cloneTodoItem.value.id) {
-        emit("update-todo-item", cloneTodoItem.value);
+      props.todoItem.tags.push(tag);
+      if (props.todoItem.id) {
+        emit("update-todo-item", props.todoItem);
       } else {
-        emit("update-add-todo-form", cloneTodoItem.value)
+        emit("update-add-todo-form", props.todoItem)
       }
     }
     showDialog.value = false;
@@ -173,12 +168,12 @@ const handleTagInputKeydown = (e: KeyboardEvent) => {
  * @param newFlag
  */
 const handleUpdateFlag = (newFlag: boolean) => {
-  cloneTodoItem.value.flag = newFlag;
-  console.log(cloneTodoItem.value)
-  if (cloneTodoItem.value.id) {
-    emit("update-todo-item", cloneTodoItem.value);
+  props.todoItem.flag = newFlag;
+  console.log(props.todoItem)
+  if (props.todoItem.id) {
+    emit("update-todo-item", props.todoItem);
   } else {
-    emit("update-add-todo-form", cloneTodoItem.value);
+    emit("update-add-todo-form", props.todoItem);
   }
 };
 </script>

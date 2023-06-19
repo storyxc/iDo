@@ -99,12 +99,6 @@ const handleUpdateAddTodoItemForm = async (item: TodoItemEntity) => {
   childTodoForm.tags = item.tags;
   childTodoForm.flag = item.flag;
   childTodoForm.completed = item.completed;
-  todoItemForm.id = item.id;
-  todoItemForm.title = item.title;
-  todoItemForm.remark = item.remark;
-  todoItemForm.tags = item.tags;
-  todoItemForm.flag = item.flag;
-  todoItemForm.completed = item.completed;
 }
 /**
  * 点击新增项元素外部时的回调
