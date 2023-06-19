@@ -8,5 +8,4 @@ export interface ElectronAPI {
     addTodoItem: (todoItemEntityStr: string) => Promise<boolean>;
     toggleAutoLaunch: (enabled: boolean) => Promise<boolean>;
     getPreferences: () => Promise<Preferences>;
-    changeUpdateFrequency: (frequency: string) => Promise<boolean>;
 }

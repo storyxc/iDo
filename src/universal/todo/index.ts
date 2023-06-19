@@ -16,12 +16,4 @@ interface Preferences {
     updateFrequency: string;
 }
 
-const UpdateFrequency = {
-    Never: "never",
-    Daily: "daily",
-    Weekly: "weekly",
-    Manually: "manually",
-}
-
 export type { TodoItemEntity, TodoList, Preferences };
-export { UpdateFrequency };

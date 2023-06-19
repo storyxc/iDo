@@ -133,18 +133,6 @@ export default {
             fs.writeFileSync(preferencesFilePath, JSON.stringify(preferencesObj));
             return true;
         });
-
-        /**
-         * @description 切换更新频率
-         */
-        ipcMain.handle("CHANGE-UPDATE-FREQUENCY", async (event, updateFrequency: string): Promise<boolean> => {
-            const preferences = fs.readFileSync(preferencesFilePath, "utf-8");
-            const preferencesObj = JSON.parse(preferences);
-            preferencesObj.updateFrequency = updateFrequency;
-            fs.writeFileSync(preferencesFilePath, JSON.stringify(preferencesObj));
-            return true;
-        });
-
     },
 
 }

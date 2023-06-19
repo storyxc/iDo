@@ -8,5 +8,4 @@ contextBridge.exposeInMainWorld("api", {
     addTodoItem: (todoItemStr: string) => ipcRenderer.invoke("ADD-TODO-ITEM", todoItemStr),
     toggleAutoLaunch: (enabled: boolean) => ipcRenderer.invoke("TOGGLE-AUTO-LAUNCH", enabled),
     getPreferences: () => ipcRenderer.invoke("GET-PREFERENCES"),
-    changeUpdateFrequency: (frequency: string) => ipcRenderer.invoke("CHANGE-UPDATE-FREQUENCY", frequency),
 });
