@@ -5,7 +5,9 @@
   "scripts": {
     "dev": "vite",
     "build": "vue-tsc && vite build && electron-builder",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "build:arm": "vue-tsc && vite build && electron-builder -m --arm64 -p always -c.artifactName='${productName}-${version}-mac-arm64.${ext}'",
+    "build:x86": "vue-tsc && vite build && electron-builder -m -p always -c.artifactName='${productName}-${version}-mac-x86.${ext}'"
   },
   "dependencies": {
     "element-plus": "^2.3.6",
@@ -52,11 +54,7 @@
       },
       "target": [
         {
-          "target": "dmg",
-          "arch": [
-            "arm64",
-            "x64"
-          ]
+          "target": "dmg"
         }
       ]
     }
