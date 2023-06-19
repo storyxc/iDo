@@ -7,13 +7,13 @@
           :value="todoItem.title"
           @blur="titleInputOnBlur"
           @focus="titleInputOnFocus"
-          @input="todoItem.title = $event.target.value"
+          @input="handleTitleInput"
       />
       <div :class="[{ 'display-none': !focused && !todoItem.title }]">
         <input class="todo-desc todo-input"
                :value="todoItem.remark"
                @blur="descInputOnBlur"
-               @input="todoItem.remark = $event.target.value"
+               @input="handleDescInput"
         />
         <!--标签-->
         <div class="todo-tags">
@@ -91,6 +91,12 @@ const handleComplete = async (id: number) => {
 const titleInputOnFocus = () => {
   focused.value = true;
 };
+
+// 标题输入事件
+const handleTitleInput = (e: InputEvent) => {
+  props.todoItem.title = (e.target as HTMLInputElement).value;
+};
+
 const titleInputOnBlur = () => {
   if (!props.todoItem.title) {
     // 失去焦点时，如果标题为空，且id不为空，则删除该todoItem
@@ -108,6 +114,12 @@ const titleInputOnBlur = () => {
     }
     focused.value = false;
   }
+};
+/**
+ * 描述部分
+ */
+const handleDescInput = (e: InputEvent) => {
+  props.todoItem.remark = (e.target as HTMLInputElement).value;
 };
 
 const descInputOnBlur = () => {
