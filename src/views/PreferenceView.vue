@@ -4,9 +4,13 @@
       <el-checkbox v-model="preferences.startAtLogin" @change="handleStartAtLoginChange">Launch on system startup
       </el-checkbox>
     </el-form>
+    <div class="version">
+      <span>v{{ pkg.version }}</span>
+    </div>
   </div>
 </template>
 <script setup lang="ts">
+import pkg from "../../package.json"
 
 const preferences = reactive({
   startAtLogin: false,
@@ -29,5 +33,12 @@ const handleStartAtLoginChange = async (enabled: boolean) => {
 <style scoped lang="less">
 .container {
   font-weight: 500;
+
+  .version {
+    position: absolute;
+    color: #7C7B7B;
+    bottom: 5px;
+    right: 7px;
+  }
 }
 </style>
