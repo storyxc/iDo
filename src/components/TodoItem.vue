@@ -256,7 +256,7 @@ const handleUpdateFlag = (newFlag: boolean) => {
         .todo-tag {
           display: flex;
           align-items: center;
-          margin-right: 10px;
+          margin-right: 8px;
           padding: 2px 5px;
           border-color: var(--tag-border-color);
           background-color: var(--tag-bg-color);
@@ -265,8 +265,11 @@ const handleUpdateFlag = (newFlag: boolean) => {
 
       .tags-add {
         position: relative;
-        width: 25px;
-        height: 25px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 20px;
+        height: 20px;
         color: #858585;
         background-color: var(--tag-bg-color);
         border: 1px solid var(--tag-border-color);

@@ -16,12 +16,16 @@ const props = defineProps({
 <style scoped lang="less">
 
 .flag {
-  width: 25px;
-  height: 25px;
-  margin-left: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+  margin-left: 8px;
   border: 1px solid var(--tag-border-color);
   border-radius: 5px;
   background-color: var(--tag-bg-color);
+  font-size: 12px !important;
 
   .todo-flag {
     &-n {
