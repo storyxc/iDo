@@ -17,6 +17,7 @@ const createWindow = () => {
         frame: false,
         show: false,
         webPreferences: {
+            spellcheck: false,
             nodeIntegration: false,
             contextIsolation: true,
             webSecurity: true,
