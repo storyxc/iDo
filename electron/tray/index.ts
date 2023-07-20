@@ -30,8 +30,8 @@ class TrayGenerator {
     showWindow() {
         const position = this.getWindowPosition();
         this.window?.setPosition(position.x, position.y, false);
-        this.window?.show();
         this.window?.setVisibleOnAllWorkspaces(true, { visibleOnFullScreen: true });
+        this.window?.show();
         this.window?.focus();
     }
 
