@@ -28,9 +28,9 @@ class TrayGenerator {
      * We hide the rest by passing false to same method:
      */
     showWindow() {
+        this.window?.setVisibleOnAllWorkspaces(true, { visibleOnFullScreen: true, skipTransformProcessType: true });
         const position = this.getWindowPosition();
         this.window?.setPosition(position.x, position.y, false);
-        this.window?.setVisibleOnAllWorkspaces(true, { visibleOnFullScreen: true });
         this.window?.show();
         this.window?.focus();
     }
