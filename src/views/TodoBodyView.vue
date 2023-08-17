@@ -58,7 +58,8 @@ const todoItemForm: TodoItemEntity = reactive<TodoItemEntity>({
   remark: '',
   tags: [],
   flag: false,
-  completed: false
+  completed: false,
+  completedAt: ''
 });
 
 const handleRemoveTodoItem = async (id: number) => {
@@ -90,7 +91,8 @@ const childTodoForm = reactive<TodoItemEntity>({
   remark: '',
   tags: [],
   flag: false,
-  completed: false
+  completed: false,
+  completedAt: ''
 });
 const handleUpdateAddTodoItemForm = async (item: TodoItemEntity) => {
   childTodoForm.id = item.id;

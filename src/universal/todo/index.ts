@@ -4,7 +4,8 @@ interface TodoItemEntity {
     remark: string;
     tags: string[];
     flag: boolean;
-    completed: boolean;
+    completed: boolean,
+    completedAt: string;
 }
 
 interface TodoList {
